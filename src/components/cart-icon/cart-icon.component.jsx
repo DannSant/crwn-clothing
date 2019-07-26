@@ -9,14 +9,18 @@ import {totggleCartHidden} from '../../redux/cart/cart.actions';
 
 import {selectCartItemsCount} from '../../redux/cart/cart.selectors';
 
-import './cart-icon.styles.scss';
+import {
+  CartContainer,
+  ShoppingIcon,
+  ItemCountContainer
+} from './cart-icon.styles';
 
 const CartIcon=({totggleCartHidden,itemCount}) =>(
-    <div className='cart-icon' onClick={totggleCartHidden}>
-        <ShoppingCart className='shopping-icon'></ShoppingCart>
-        <span className='item-count'>{itemCount}</span>
-    </div>
-)
+  <CartContainer onClick={totggleCartHidden}>
+    <ShoppingIcon />
+    <ItemCountContainer>{itemCount}</ItemCountContainer>
+  </CartContainer>
+);
 
 const mapDispatchToProps = dispatch =>({
     totggleCartHidden: user=> dispatch(totggleCartHidden())

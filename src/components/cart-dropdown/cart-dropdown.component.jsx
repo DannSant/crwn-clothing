@@ -9,24 +9,34 @@ import {createStructuredSelector} from 'reselect';
 import {selectCartItems} from '../../redux/cart/cart.selectors';
 import {totggleCartHidden} from '../../redux/cart/cart.actions';
 
-import './cart-dropdown.styles.scss';
+import {
+    CartDropdownContainer,
+    CartDropdownButton,
+    EmptyMessageContainer,
+    CartItemsContainer
+  } from './cart-dropdown.styles';
 
 const CartDropdown = ({cartItems,history, dispatch}) => (
-    <div className='cart-dropdown'>
-        <div className='cart-items'>
-            {
-                cartItems.length > 0 ?
-                    cartItems.map(cartItem => <CartItem key={cartItem.id} item={cartItem}></CartItem>)
-                :
-                    (<span className='empty-message'>Your cart is empty</span>)
-            }
-        </div>
-        <CustomButton onClick={()=>{            
-            history.push('/checkout')
-            dispatch(totggleCartHidden())
-            }} inverted>CHECKOUT</CustomButton>
-    </div>
-);
+    <CartDropdownContainer>
+      <CartItemsContainer>
+        {cartItems.length ? (
+          cartItems.map(cartItem => (
+            <CartItem key={cartItem.id} item={cartItem} />
+          ))
+        ) : (
+          <EmptyMessageContainer>Your cart is empty</EmptyMessageContainer>
+        )}
+      </CartItemsContainer>
+      <CartDropdownButton
+        onClick={() => {
+          history.push('/checkout');
+          dispatch(totggleCartHidden());
+        }}
+      >
+        GO TO CHECKOUT
+      </CartDropdownButton>
+    </CartDropdownContainer>
+  );
 
 
 
