@@ -3,6 +3,7 @@ import UserActionType from './user.types';
 import {auth,googleProvider,createUserProfileDocument,getCurrentAuthUser} from '../../firebase/firebase.utils';
 
 import {signInSuccess,signInFailure,signOutSuccess,signOutFailure,signUpSuccess,signUpFailure} from './user.actions';
+import {clearCart} from '../cart/cart.actions';
 
 export function* getSnapshotFromUserAuth(userAuth,additionalData){
     try {      
@@ -46,7 +47,10 @@ export function* onEmailSignInStart(){
 export function* isUserAuthenticated(){
     try {
         const userAuth = yield getCurrentAuthUser();
-        if(!userAuth) return;
+        if(!userAuth) {
+            yield put(clearCart());
+            return;
+        }
         yield getSnapshotFromUserAuth(userAuth);
     } catch(error){
         yield put(signInFailure(error))

@@ -11,13 +11,11 @@ import Shop from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInAndSignOut from './pages/sig-in-and-sign-out/sig-in-and-sign-out.component';
 import CheckoutPage from './pages/checkout/checkout.component';
+import ContactPage from './pages/contact/contact.component';
 
 import {checkUserSession} from './redux/user/user.actions';
 
-
-
-import './App.css';
-
+import {GlobalStyle} from './global.styles';
 
 
 
@@ -35,12 +33,14 @@ const App = ({checkUserSession,currentUser})=>{
 
   return (
     <div>
+      <GlobalStyle></GlobalStyle>
       <Header ></Header>
       <Switch>
         <Route exact path='/' component={HomePage} />
         <Route  path='/shop' component={Shop} />
         <Route exact path='/checkout' component={CheckoutPage} />
         <Route  path='/signin' render={()=>currentUser ? (<Redirect to='/' />) : (<SignInAndSignOut></SignInAndSignOut>)} />
+        <Route exact path='/contact' component={ContactPage}></Route>
       </Switch>
     
     </div>
