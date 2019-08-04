@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect,lazy, Suspense} from 'react';
 import {Switch,Route,Redirect} from 'react-router-dom'
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
@@ -6,18 +6,26 @@ import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser} from './redux/user/user.selectors';
 
 
-import HomePage from './pages/homepage/homepage.component';
-import Shop from './pages/shop/shop.component';
+//import HomePage from './pages/homepage/homepage.component';
+// import Shop from './pages/shop/shop.component';
+// import SignInAndSignOut from './pages/sig-in-and-sign-out/sig-in-and-sign-out.component';
+// import CheckoutPage from './pages/checkout/checkout.component';
+// import ContactPage from './pages/contact/contact.component';
+
 import Header from './components/header/header.component';
-import SignInAndSignOut from './pages/sig-in-and-sign-out/sig-in-and-sign-out.component';
-import CheckoutPage from './pages/checkout/checkout.component';
-import ContactPage from './pages/contact/contact.component';
+import Spinner from './components/spinner/spinner.component';
+import ErrorBoundary from './components/error-boundary/error-boundary.component';
 
 import {checkUserSession} from './redux/user/user.actions';
 
 import {GlobalStyle} from './global.styles';
 
-
+//Lazy loading
+const HomePage= lazy(()=> import('./pages/homepage/homepage.component'));
+const Shop = lazy(()=> import('./pages/shop/shop.component'));
+const SignInAndSignOut = lazy(()=> import('./pages/sig-in-and-sign-out/sig-in-and-sign-out.component'));
+const CheckoutPage = lazy(()=> import('./pages/checkout/checkout.component'));
+const ContactPage = lazy(()=> import('./pages/contact/contact.component'));
 
 const App = ({checkUserSession,currentUser})=>{
 
@@ -36,11 +44,15 @@ const App = ({checkUserSession,currentUser})=>{
       <GlobalStyle></GlobalStyle>
       <Header ></Header>
       <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route  path='/shop' component={Shop} />
-        <Route exact path='/checkout' component={CheckoutPage} />
-        <Route  path='/signin' render={()=>currentUser ? (<Redirect to='/' />) : (<SignInAndSignOut></SignInAndSignOut>)} />
-        <Route exact path='/contact' component={ContactPage}></Route>
+        <ErrorBoundary>
+          <Suspense fallback={<Spinner></Spinner>}>
+            <Route exact path='/' component={HomePage} />         
+            <Route  path='/shop' component={Shop} />
+            <Route exact path='/checkout' component={CheckoutPage} />
+            <Route  path='/signin' render={()=>currentUser ? (<Redirect to='/' />) : (<SignInAndSignOut></SignInAndSignOut>)} />
+            <Route exact path='/contact' component={ContactPage}></Route>
+          </Suspense>
+        </ErrorBoundary>
       </Switch>
     
     </div>
